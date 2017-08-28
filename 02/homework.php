@@ -42,21 +42,33 @@ function formulaTriangle($point, $currentSector) {
 function formulaRectangle($point, $currentSector) {
   switch($currentSector['position']) {
     case 'topRight':
+      echo '<p>pointX: '.$point['x'].', sectorX: '.$currentSector['x'].', pointY: '.$point['y'].', sectorY: '.$currentSector['y'].'</p>';
       return ($point['x'] > $currentSector['x'] || $point['y'] > $currentSector['y']) ? false : true;
 
     case 'bottomRight':
+      echo '<p>pointX: '.$point['x'].', sectorX: '.$currentSector['x'].', pointY: '.$point['y'].', sectorY: '.$currentSector['y'].'</p>';
       return ($point['x'] > $currentSector['x'] || $point['y'] < $currentSector['y']) ? false : true;
 
     case 'bottomLeft':
+      echo '<p>pointX: '.$point['x'].', sectorX: '.$currentSector['x'].', pointY: '.$point['y'].', sectorY: '.$currentSector['y'].'</p>';
       return ($point['x'] < $currentSector['x'] || $point['y'] < $currentSector['y']) ? false : true;
 
     case 'topLeft':
+      echo '<p>pointX: '.$point['x'].', sectorX: '.$currentSector['x'].', pointY: '.$point['y'].', sectorY: '.$currentSector['y'].'</p>';
       return ($point['x'] < $currentSector['x'] || $point['y'] > $currentSector['y']) ? false : true;
   }
 }
 
 function formulaArc($point, $currentSector) {
-  return abs($point['x']) > abs($currentSector['x']) ? false : true;
+  $radius = abs($currentSector['x']);
+  $x = 0 - $point['x'];
+  $y = 0 - $point['y'];
+  $x = pow(abs($x), 2);
+  $y = pow(abs($y), 2);
+  $line = sqrt($x + $y);
+
+  echo "<p>radius: $radius, line: $line</p>";
+  return $line > $radius ? false : true;
 }
 
 function checkPoint($point, $area) {
@@ -75,22 +87,17 @@ function checkPoint($point, $area) {
 
   switch($currentSector['figure']) {
     case 'triangle':
-      $result = formulaTriangle($point, $currentSector);
-      break;
+      return formulaTriangle($point, $currentSector);
     
     case 'rectangle':
-      $result = formulaRectangle($point, $currentSector);
-      break;
+      return formulaRectangle($point, $currentSector);
 
     case 'arc':
-      $result = formulaArc($point, $currentSector);
-      break;
+      return formulaArc($point, $currentSector);
 
     default:
-      $result = formulaRectangle($point, $currentSector);
+      return formulaRectangle($point, $currentSector);
   }
-
-  return $result;
 }
 
 $pointBottomRightIn = array(

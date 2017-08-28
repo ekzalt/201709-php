@@ -70,8 +70,45 @@ echo $c;
 
 ///////////////////////////////////////////////////////
 
+/*
 for ($i = 1; $i <= 4; $i++) {
   echo "<p><a href=\"photo.php?id=$i\">img $i</a></p>";
 }
+*/
+
+///////////////////////////////////////////////////////
+
+const MAX_X = 10;
+
+$varFoo1 = function() {
+  echo 'Hello';
+};
+
+$varFoo2 = $varFoo1;
+
+function someFunc() {
+  echo 'Hello';
+}
+
+function showArg() {
+  echo MAX_X;
+  echo '<br>';
+  echo someFunc;
+  echo '<br>';
+}
+
+echo '<p>Превед Медвед</p>';
+showArg();
+echo '<ol>
+<li>У Констант и Функций глобальная область видимости.</li>
+<li>Функции нельзя объявлять повторно, вкладывать друг в друга и возвращать из функций.</li>
+<li>В PHP нет scope и closure (в моем понимании JS).</li>
+<li>В PHP работает Function Expression (хоть этот синтаксис не подсвечивается) и передача объекта функции по ссылке.</li>
+</ol>';
+
+var_dump($varFoo1);
+$varFoo1();
+echo '<br>';
+$varFoo2();
 
 ?>

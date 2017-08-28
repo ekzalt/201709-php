@@ -573,16 +573,22 @@ foreach ($a as $k => $t) echo "$k = $t<br>";
 /////////////////////////////////////////////////
 
 /*
-in_array(); - если элемент найден, возвращает true, иначе false.
+in_array(); - если элемент/значение найдено, возвращает true, иначе false.
 
-array_search(); - если элемент найден, возвращает его ключ, иначе false.
+array_search(); - если элемент/значение найдено, возвращает его ключ, иначе false.
+
+isset(); - возвращает true, если значение по запрашиваемому ключу не null.
 */
 
-$a = array("первый" => 6, "второй" => 2, "третий" => 1);
+$arr = array('first' => 6, 'second' => 2, 'third' => 30);
 
-if ( in_array(2, $a) ) echo "2 нашли!<br>";
+if ( in_array(2, $arr) ) echo '<p>такое значение (2) в массиве найдено -> true: ' . in_array(2, $arr) . '</p>';
 
-echo "ключ найденного элемента: " . array_search(2, $a);
+if ( array_search(2, $arr) ) echo '<p>такое значение (2) в массиве найдено -> key: ' . array_search(2, $arr) . '</p>';
+
+if ( isset($arr['second']) ) echo '<p>значение по такому ключу (second) !== null (определено) -> true: ' . isset($arr['second']) . '</p>';
+
+echo '<p>значение по такому ключу (second) -> value: ' . $arr['second'] . '</p>';
 
 ?>
 </body>
