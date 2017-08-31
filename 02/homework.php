@@ -36,31 +36,17 @@ $sectorTopLeft = array(
 $area = array($sectorTopRight, $sectorBottomRight, $sectorBottomLeft, $sectorTopLeft);
 
 function formulaTriangle($point, $currentSector) {
-  //
+  // code
 }
 
 function formulaRectangle($point, $currentSector) {
-  switch($currentSector['position']) {
-    case 'topRight':
-      echo '<p>pointX: '.$point['x'].', sectorX: '.$currentSector['x'].', pointY: '.$point['y'].', sectorY: '.$currentSector['y'].'</p>';
-      return ($point['x'] > $currentSector['x'] || $point['y'] > $currentSector['y']) ? false : true;
-
-    case 'bottomRight':
-      echo '<p>pointX: '.$point['x'].', sectorX: '.$currentSector['x'].', pointY: '.$point['y'].', sectorY: '.$currentSector['y'].'</p>';
-      return ($point['x'] > $currentSector['x'] || $point['y'] < $currentSector['y']) ? false : true;
-
-    case 'bottomLeft':
-      echo '<p>pointX: '.$point['x'].', sectorX: '.$currentSector['x'].', pointY: '.$point['y'].', sectorY: '.$currentSector['y'].'</p>';
-      return ($point['x'] < $currentSector['x'] || $point['y'] < $currentSector['y']) ? false : true;
-
-    case 'topLeft':
-      echo '<p>pointX: '.$point['x'].', sectorX: '.$currentSector['x'].', pointY: '.$point['y'].', sectorY: '.$currentSector['y'].'</p>';
-      return ($point['x'] < $currentSector['x'] || $point['y'] > $currentSector['y']) ? false : true;
-  }
+  echo '<p>pointX: '.$point['x'].', sectorX: '.$currentSector['x'].', pointY: '.$point['y'].', sectorY: '.$currentSector['y'].'</p>';
+  return (abs($point['x']) > abs($currentSector['x']) || abs($point['y']) > abs($currentSector['y'])) ? false : true;
 }
 
 function formulaArc($point, $currentSector) {
   $radius = abs($currentSector['x']);
+
   $x = 0 - $point['x'];
   $y = 0 - $point['y'];
   $x = pow(abs($x), 2);
