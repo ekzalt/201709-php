@@ -24,6 +24,7 @@ if(isset($_POST['submit'])){
       'price' => $_POST['price'],
       'description' => $_POST['description']
     ];
+    
     $fileContent = serialize($arPhones);
     file_put_contents($storagePath, $fileContent);
   }
