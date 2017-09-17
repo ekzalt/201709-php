@@ -25,7 +25,7 @@ var_dump($n2);
 
 // task 2
 
-// create
+// create / append
 function addToCsv($path, $content) {
   $file = fopen($path, 'a');
 
@@ -47,7 +47,7 @@ function readCsv($path) {
 
 $err = '';
 
-if ( isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['position']) ) {
+if ( isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['position']) ) { // if (!empty($_POST)) {...} || if (count($_POST)) {...}
   $name = trim($_POST['name']);
   $surname = trim($_POST['surname']);
   $position = trim($_POST['position']);
@@ -63,13 +63,13 @@ if ( isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['position
       'position' => $position
     ];
 
-    addToCsv('users.csv', $user);
-    // header('Location: /');
-    // exit();
+    addToCsv('users.csv', $user); // addToCsv('users.csv', [$name, $surname, $position]);
+    header('Location: /');
+    exit();
   }
 }
 
-$users = readCsv('users.csv');
+$users = file_exists('users.csv') ? readCsv('users.csv') : [];
 
 ?>
 
@@ -98,14 +98,17 @@ $users = readCsv('users.csv');
     <p><?= var_dump($users) ?></p>
 
     <?php if (count($users)) { ?>
-      <ol>
-      <?php foreach ($users as $user) { ?>
-        <li><?= $user[0] ?> <?= $user[1] ?>, <?= $user[2] ?></li>
-      <?php } ?>
-      <ol>
+      <section>
+        <p>Пользователи:</p>
+        <ol>
+          <?php foreach ($users as $user) { ?>
+            <li><?= $user[0] ?> <?= $user[1] ?>, <?= $user[2] ?></li>
+          <?php } ?>
+        </ol>
+      </section>
     <?php } ?>
 
-    <div>
+    <section>
       <p><strong>Logger: <?= __FILE__ ?></strong></p>
       <p>get:<?= var_dump($_GET) ?></p>
       <p>post:<?= var_dump($_POST) ?></p>
@@ -113,7 +116,7 @@ $users = readCsv('users.csv');
       <p>cookie:<?= var_dump($_COOKIE) ?></p>
       <p>session:<?= var_dump($_SESSION) ?></p>
       <p>server:<?= var_dump($_SERVER) ?></p>
-    </div>
+    </section>
   </main>
 </body>
 </html>
