@@ -64,6 +64,7 @@ if ( isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['position
     ];
 
     addToCsv('users.csv', $user); // addToCsv('users.csv', [$name, $surname, $position]);
+    
     header('Location: /');
     exit();
   }
