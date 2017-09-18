@@ -22,11 +22,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
   if ($res->num_rows) {
     $file = $res->fetch_assoc();
   } else {
-    // $file = заглушка
+    // заглушка или редирект
   }
   
 } else {
-  // $file = заглушка
+  // заглушка или редирект
 }
 
 ?>

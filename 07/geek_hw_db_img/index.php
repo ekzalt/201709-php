@@ -13,7 +13,8 @@ $mysqli = new mysqli($server, $username, $password, $dbName);
 
 // шаг 1 - загрузить файл (опционально)
 if (count($_FILES) && isset($_FILES['img']) && $_FILES['img']['name'] && $_FILES['img']['type'] === 'image/jpeg') {
-  $fileName = $_FILES['img']['name'];
+  // прибавляем время в секундах к имени фото, чтобы сделать имя уникальным
+  $fileName = time() . '_' . $_FILES['img']['name'];
   $mimeType = $_FILES['img']['type'];
   $pathTmp = $_FILES['img']['tmp_name'];
   $pathImg = $pathImgs . $fileName;
