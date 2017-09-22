@@ -21,13 +21,14 @@ function getArrDir($path = '', $lvl = 0) {
     $filePath = $path . DIRECTORY_SEPARATOR . $file;
     $item['name'] = $file;
     $item['path'] = $filePath;
-    // $item['level'] = $lvl;
+    $item['level'] = $lvl;
 
     if (is_dir($filePath)) {
       $item['type'] = 'dir';
       $item['children'] = getArrDir($filePath, $lvl + 1);
     } else {
       $item['type'] = 'file';
+      $item['children'] = [];
     }
 
     $result[] = $item;
@@ -36,70 +37,62 @@ function getArrDir($path = '', $lvl = 0) {
   return $result;
 }
 
+/*
 // рекурсивная функция - выводит максимальный уровень вложенности в массиве
-function getMaxLvl($arr = []) {
-  $itemsLvls = [];
+function getMaxLvl($arr = [], $lvl = 0, $maxLvl = 0) {
+  if (!count($arr)) return $maxLvl;
 
-  if (!count($arr)) return $itemsLvls;
+  $maxLvl = ($maxLvl > $lvl) ? $maxLvl : $lvl;
 
   foreach ($arr as $item) {
-    $lvl = 0;
-
-    if (count($item['children'])) {
-      $lvl++;
-      getMaxLvl($item['children']);
-      
-    } else {
-      continue;
-    }
-
-    $itemsLvls[] = $lvl;
+    if ( count($item['children']) ) $maxLvl = getMaxLvl($item['children'], $lvl + 1, $maxLvl);
+    else continue;
   }
 
-  return $itemsLvls;
+  return $maxLvl;
+}
+*/
+
+function printItem($arr) {
+  foreach ($arr as $item) {
+    if ($item['type'] === 'dir') echo "<p><small>{$item['level']}</small> | <b>{$item['name']}</b> | <small>{$item['path']}</small></p>";
+    else echo "<p><small>{$item['level']}</small> | <i>{$item['name']}</i> | <small>{$item['path']}</small></p>";
+
+    if ( count($item['children']) ) printItem($item['children']);
+  }
+}
+
+function scanNWrite($dirPath, $filePath) {
+  $arr = getArrDir($dirPath);
+  // var_dump($arr);
+
+  $strArr = serialize($arr);
+
+  $file = fopen($filePath, 'w');
+  fputs($file, $strArr);
+  fclose($file);
+}
+
+function readNPrint($filePath) {
+  if (!file_exists($filePath)) return;
+
+  $file = fopen($filePath, 'r');
+  $content = fgets($file);
+  fclose($file);
+
+  $arr = unserialize($content);
+
+  if (!is_array($arr)) return;
+
+  // var_dump($arr);
+  printItem($arr);
 }
 
 /////////////////////////////////////////////////////////
 
-$path = $_GET['path'] ?? './';
-$arr = getArrDir('c:\Program Files (x86)\Ampps\www');
-// var_dump($arr);
+scanNWrite('c:\Program Files (x86)\Ampps\www', 'text.txt');
 
-// преобразовал массив в строку
-$strArrSerialized = serialize($arr);
-// var_dump($strArrSerialized);
-
-// записал/прочитал файл
-$pathTxt = 'text.txt';
-$fileContent = '';
-
-if (!file_exists($pathTxt)) {
-  $file = fopen($pathTxt, 'w');
-  fputs($file, $strArrSerialized); // текстовая запись
-  fclose($file);
-
-} else {
-  $file = fopen($pathTxt, 'r');
-  $fileContent = fgets($file); // текстовое чтение
-  fclose($file);
-}
-
-// var_dump($fileContent);
-
-// преобразовал строку в массив обратно
-$arrUnserialized = unserialize($fileContent);
-var_dump($arrUnserialized);
-
-// получил уровни вложенности для каждой ветви дерева директорий
-if (!is_array($$arrUnserialized)) $arrUnserialized = [];
-$arrItemsLvls = getMaxLvl($arrUnserialized);
-
-// вывел максимальный уровень вложенности для каждого элемента
-var_dump($arrItemsLvls);
-
-sort($arrItemsLvls);
-
-// вывел максимальный уровень вложенности вцелом
-var_dump($arrItemsLvls[count($arrItemsLvls) - 1]);
+// var_dump( readNPrint('text.txt') );
+readNPrint('text.txt')
 
 ?>
