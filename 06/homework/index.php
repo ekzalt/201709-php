@@ -1,123 +1,160 @@
 <?php
 
-// task 1
+// рекурсивная функция - выводит дерево файлов в ассоциативный массив
+function getArrDir($path = '', $lvl = 0) {
+  $result = [];
+
+  if (!file_exists($path)) return $result;
+
+  $item = [
+    'type' => '',
+    'name' => '',
+    'path' => '',
+    'level' => $lvl,
+    'children' => []
+  ];
+  $files = scandir($path);
+
+  foreach ($files as $file) {
+    if ($file === '.' || $file === '..') continue;
+
+    $filePath = $path . DIRECTORY_SEPARATOR . $file;
+    $item['name'] = $file;
+    $item['path'] = $filePath;
+    $item['level'] = $lvl;
+
+    if (is_dir($filePath)) {
+      $item['type'] = 'dir';
+      $item['children'] = getArrDir($filePath, $lvl + 1);
+    } else {
+      $item['type'] = 'file';
+      $item['children'] = [];
+    }
+
+    $result[] = $item;
+  }
+
+  return $result;
+}
 
 /*
-$n1 = 100500;
-$n2 = 0;
+// рекурсивная функция - выводит максимальный уровень вложенности в массиве
+function getMaxLvl($arr = [], $lvl = 0, $maxLvl = 0) {
+  if (!count($arr)) return $maxLvl;
 
-var_dump($n1);
-var_dump($n2);
+  $maxLvl = ($maxLvl > $lvl) ? $maxLvl : $lvl;
 
-// мутирующая функция
-function toBool(&$n): bool {
-  return settype($n, 'boolean');
+  foreach ($arr as $item) {
+    if ( count($item['children']) ) $maxLvl = getMaxLvl($item['children'], $lvl + 1, $maxLvl);
+    else continue;
+  }
+
+  return $maxLvl;
 }
-
-toBool($n1);
-toBool($n2);
-
-var_dump($n1);
-var_dump($n2);
 */
 
-/////////////////////////////////////////////////////
+// версия 1
+function printItem($arr) {
+  $html = '<div class="container">';
 
-// task 2
+  foreach ($arr as $item) {
+    if ($item['type'] === 'dir') $html .= "<p class=\"dir\"><small>{$item['level']}</small> | <span>{$item['name']}</span> | <small>{$item['path']}</small></p>";
+    else $html .= "<p class=\"file\"><small>{$item['level']}</small> | <span>{$item['name']}</span> | <small>{$item['path']}</small></p>";
 
-// create / append
-function addToCsv($path, $content) {
-  $file = fopen($path, 'a');
-
-  fputcsv($file, $content);
-  fclose($file);
-}
-
-// read
-function readCsv($path) {
-  $arr = [];
-  $file = fopen($path, 'r');
-
-  while ($row = fgetcsv($file)) $arr[] = $row;
-
-  fclose($file);
-
-  return $arr;
-}
-
-$err = '';
-
-if ( isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['position']) ) { // if (!empty($_POST)) {...} || if (count($_POST)) {...}
-  $name = trim($_POST['name']);
-  $surname = trim($_POST['surname']);
-  $position = trim($_POST['position']);
-
-  if (!$name) $err .= 'Имя: нет данных. ';
-  if (!$surname) $err .= 'Фамилия: нет данных. ';
-  if (!$position) $err .= 'Должность: нет данных. ';
-
-  if ($name && $surname && $position) {
-    $user = [
-      'name' => $name,
-      'surname' => $surname,
-      'position' => $position
-    ];
-
-    addToCsv('users.csv', $user); // addToCsv('users.csv', [$name, $surname, $position]);
-    
-    header('Location: /');
-    exit();
+    if ( count($item['children']) ) $html .= printItem($item['children']);
   }
+
+  $html .= '</div>';
+  return $html;
 }
 
-$users = file_exists('users.csv') ? readCsv('users.csv') : [];
+/*
+// версия 2 - с примера
+$maxLevel = 0;
+
+function printItem($arr) {
+  $html = '<div class="container">';
+
+  foreach ($arr as $item) {
+      $maxLevel = $item['level'] > $maxLevel ? $item['level'] : $maxLevel;
+      $item_html = "<div class='%s'><span class='title' title='{$item['path']}'>{$item['name']}</span><span class='path'>({$item['path']})</span></div>";
+      
+      if ($item['type'] === 'file') {
+          $html .= sprintf($item_html, 'file');
+
+      } else if ($item['type'] === 'dir') {
+          $html .= sprintf($item_html, 'dir');
+
+          if (!isset($item['children']) || !is_array($item['children'])) throw new Error("Key 'children' must be an array");
+
+          $html .= printItem($item['children']);
+
+      } else {
+          throw new Error("Unknown item 'type': {$item['type']}");
+      }
+  }
+
+  $html .= '</div>';
+
+  return $html;
+}
+*/
+
+function scanNWrite($dirPath, $filePath) {
+  $arr = getArrDir($dirPath);
+  // var_dump($arr);
+
+  $strArr = serialize($arr);
+
+  $file = fopen($filePath, 'w');
+  fputs($file, $strArr);
+  fclose($file);
+}
+
+function readNPrint($filePath) {
+  if (!file_exists($filePath)) return;
+
+  $file = fopen($filePath, 'r');
+  $content = fgets($file);
+  fclose($file);
+
+  $arr = unserialize($content);
+
+  if (!is_array($arr)) return;
+
+  // var_dump($arr);
+  return printItem($arr);
+}
+
+/////////////////////////////////////////////////////////
+
+scanNWrite('c:\Program Files (x86)\Ampps\www', 'text.txt');
+
+// var_dump( readNPrint('text.txt') );
+$title = 'File list';
+$html = readNPrint('text.txt')
 
 ?>
 
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <title>Form</title>
+  <title><?= $title ?></title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <main>
-    <p><?= $err ?></p>
-
-    <form method="post">
-      <p><input name="name" placeholder="Имя"></p>
-      <p><input name="surname" placeholder="Фамилия"></p>
-      <p><input name="position" placeholder="должность"></p>
-      <p><button type="submit">Отправить</button></p>
-    </form>
-
-    <p><?= var_dump($user) ?></p>
-    <p><?= var_dump($users) ?></p>
-
-    <?php if (count($users)) { ?>
-      <section>
-        <p>Пользователи:</p>
-        <ol>
-          <?php foreach ($users as $user) { ?>
-            <li><?= $user[0] ?> <?= $user[1] ?>, <?= $user[2] ?></li>
-          <?php } ?>
-        </ol>
-      </section>
-    <?php } ?>
-
-    <section>
-      <p><strong>Logger: <?= __FILE__ ?></strong></p>
-      <p>get:<?= var_dump($_GET) ?></p>
-      <p>post:<?= var_dump($_POST) ?></p>
-      <p>files:<?= var_dump($_FILES) ?></p>
-      <p>cookie:<?= var_dump($_COOKIE) ?></p>
-      <p>session:<?= var_dump($_SESSION) ?></p>
-      <p>server:<?= var_dump($_SERVER) ?></p>
-    </section>
+    <h1><?= $title ?></h1>
+    
+    <?= $html ?>
   </main>
+  
+  <script src="main.js"></script>
 </body>
 </html>

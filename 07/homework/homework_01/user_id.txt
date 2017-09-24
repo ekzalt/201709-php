@@ -1,0 +1,1 @@
+a:3:{s:2:"id";i:1506275621;s:5:"login";s:10:"1234567890";s:13:"password_hash";s:60:"$2y$10$asLMZB3O2KrmI4pBBHsw4.CUdnkK5h704NqBpN226kCMVcXscUwBy";}

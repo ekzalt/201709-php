@@ -1,0 +1,16 @@
+.container {
+  margin-left: 20px;
+}
+
+.dir {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.dir:hover {
+  color: #666;
+}
+
+.none {
+  display: none;
+}
