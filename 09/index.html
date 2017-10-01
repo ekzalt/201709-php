@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Блочная модель</title>
+
+  <style>
+    body {
+      font-size: 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+      color: #222222
+    }
+
+    .menu {
+      text-align: center;
+      background: #002C5A;
+    }
+
+    .menu a {
+      color: white;
+      display: inline-block;
+      padding: 10px 15px;
+      margin: 10px;
+      text-decoration: none;
+      background: #005DB9;
+      border-radius: 5px;
+    }
+
+    .menu a:hover {
+      background: #0084FF;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      /* height: 100vh; */
+    }
+
+    .left {
+      float: left;
+      width: 200px;
+    }
+
+    .right {
+      float: right;
+      width: 200px;
+    }
+
+    .clearfix::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="menu">
+      <a href="">Link1</a>
+      <a href="">Link1</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Блочная модель</h1>
+    <section class="clearfix">
+      <p class="left">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis ut placeat recusandae odio mollitia fuga voluptas fugit quae eligendi fugiat soluta magnam culpa nulla blanditiis natus veniam, eius voluptatum quia?</p>
+      <p class="right">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis ut placeat recusandae odio mollitia fuga voluptas fugit quae eligendi fugiat soluta magnam culpa nulla blanditiis natus veniam, eius voluptatum quia?</p>
+    </section>
+  </main>
+
+  <footer>FOOTER</footer>
+</body>
+</html>
