@@ -40,39 +40,55 @@ var_dump( genStr(100, $chars) );
 
 /////////////////////////////////////////////////////
 
-// task 5
+// task 5 (сортировка по 2-м полям, если первое совпадает, то сортирует еще и по 2-му)
 
 $people = [[
   'id' => 123,
   'name' => 'Alex',
   'surname' => 'Zinger'
 ], [
+  'id' => 124,
+  'name' => 'Alex',
+  'surname' => 'Bazzer'
+], [
   'id' => 456,
+  'name' => 'Pit',
+  'surname' => 'Fox'
+], [
+  'id' => 457,
+  'name' => 'Bob',
+  'surname' => 'Stark'
+], [
+  'id' => 789,
   'name' => 'Pit',
   'surname' => 'Buffet'
 ], [
-  'id' => 789,
+  'id' => 790,
   'name' => 'Bob',
-  'surname' => 'Stark'
+  'surname' => 'Fox'
 ]];
 
-function arrMultisort($data = [], $direction = 'asc', $field = 'name') { // [], 'asc'/'desc', 'key'
-  $monoArr = [];
+function arrMultisort($data = [], $direction = 'asc', $field1 = 'name', $field2 = 'surname') {
+  $field1Arr = [];
+  $field2Arr = [];
   
-  foreach ($data as $key => $row) $monoArr[$key] = $row[$field];
+  foreach ($data as $key => $row) {
+    $field1Arr[$key] = $row[$field1];
+    $field2Arr[$key] = $row[$field2];
+  }
 
   switch ($direction) {
     case 'asc':
-      array_multisort($monoArr, SORT_ASC, $data);
+      array_multisort($field1Arr, SORT_ASC, $field2Arr, SORT_ASC, $data);
       return $data;
     case 'desc':
-      array_multisort($monoArr, SORT_DESC, $data);
+      array_multisort($field1Arr, SORT_DESC, $field2Arr, SORT_DESC, $data);
       return $data;
     default:
       return $data;
   }
 }
 
-var_dump( arrMultisort($people, 'desc', 'surname') );
+var_dump( arrMultisort($people, 'asc', 'name', 'surname') );
 
 ?>
