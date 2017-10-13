@@ -11,6 +11,11 @@ $pathImgsSm = 'img_sm/';
 
 $mysqli = new mysqli($server, $username, $password, $dbName);
 
+if (mysqli_connect_errno()) {
+  printf("Не удалось подключиться: %s\n", mysqli_connect_error());
+  exit();
+}
+
 // шаг 1 - загрузить файл (опционально)
 if (count($_FILES) && isset($_FILES['img']) && $_FILES['img']['name'] && $_FILES['img']['type'] === 'image/jpeg') {
   // прибавляем время в секундах к имени фото, чтобы сделать имя уникальным
