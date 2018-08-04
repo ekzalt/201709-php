@@ -1,0 +1,5 @@
+﻿Task
+
+Реализовать interface Logger и класс FileLogger implements Logger.
+Интерфейс Logger должен содержать минимум один метод для логирования.
+Класс FileLogger должен реализовать этот метод.

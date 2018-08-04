@@ -15,8 +15,8 @@ var_dump($arrLines);
 ////////////////////////////////////////////////////////
 
 $server = 'localhost';
-$username = 'root';
-$password = 'mysql';
+$username = '';
+$password = '';
 $dbName = 'test';
 
 $mysqli = new mysqli($server, $username, $password, $dbName);

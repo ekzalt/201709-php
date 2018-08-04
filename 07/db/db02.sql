@@ -46,7 +46,7 @@ DROP DATABASE `shop`;
 таблица 'product' теперь будет иметь 'foreign key' (поле 'brand_id') связанный с таблицей 'brand' (поле 'id')
 */
 ALTER TABLE `shop`.`product`
-  ADD CONSTRAINT `fk_brand_product`
+  ADD CONSTRAINT `fk_brand_product` -- ADD `col_name` VARCHAR(100) | CHANGE `col_name_old` `col_name_new` | MODIFY `col_name` VARCHAR(200)| DROP `col_name`
   FOREIGN KEY (`brand_id`)
   REFERENCES `shop`.`brand` (`id`)
   ON DELETE CASCADE -- CASCADE (при удалении родительского id - будут удалятся все дочерние связанные по ключу строки)
@@ -394,6 +394,9 @@ COUNT
 SUM
 MAX
 MIN
+
+Полный список функций, которые поддерживаются MySQL
+https://dev.mysql.com/doc/refman/5.7/en/group-by-functions.html
 */
 
 -- вернет количество всех строк
